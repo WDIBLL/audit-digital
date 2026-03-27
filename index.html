@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audit Stratégie Digitale — We Do It Better</title>
+<meta name="description" content="Diagnostiquez votre maturité digitale en 3 minutes. 8 questions, un score personnalisé et vos 3 priorités concrètes. Gratuit par We Do It Better.">
+<style>
+  :root {
+    --green: #1D9E75;
+    --green-dark: #0F6E56;
+    --green-deeper: #085041;
+    --green-light: #E1F5EE;
+    --text: #1a1a1a;
+    --text-muted: #666;
+    --border: #e0e0e0;
+    --bg: #fff;
+    --bg-secondary: #f7f7f5;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 2rem 1rem 4rem;
+  }
+  .card {
+    background: var(--bg);
+    border-radius: 20px;
+    box-shadow: 0 2px 24px rgba(0,0,0,0.07);
+    padding: 2.5rem 2rem;
+    width: 100%;
+    max-width: 600px;
+  }
+  .logo {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--green);
+    text-transform: uppercase;
+    margin-bottom: 1.75rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .logo::before {
+    content: '';
+    display: inline-block;
+    width: 8px; height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+  }
+  .prog-bg { height: 4px; background: #eee; border-radius: 2px; margin-bottom: 1.75rem; }
+  .prog-fill { height: 4px; background: var(--green); border-radius: 2px; transition: width 0.4s ease; }
+  .qlabel { font-size: 11px; color: var(--text-muted); letter-spacing: 0.09em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .qtext { font-size: 19px; font-weight: 600; line-height: 1.5; margin-bottom: 1.5rem; }
+  .opts { display: flex; flex-direction: column; gap: 10px; margin-bottom: 2rem; }
+  .opt {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 14px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px; line-height: 1.55;
+    text-align: left; cursor: pointer;
+    transition: border-color 0.12s, background 0.12s;
+    font-family: inherit;
+    width: 100%;
+  }
+  .opt:hover { border-color: var(--green); background: var(--green-light); }
+  .opt.sel { border: 2px solid var(--green); background: var(--green-light); color: var(--green-deeper); }
+  .opt-check {
+    flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
+    border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 1px; transition: all 0.12s;
+    background: #fff;
+  }
+  .opt.sel .opt-check { background: var(--green); border-color: var(--green); }
+  .opt.sel .opt-check::after {
+    content: ''; display: block;
+    width: 6px; height: 11px;
+    border: 2px solid #fff; border-top: none; border-left: none;
+    transform: rotate(45deg) translateY(-1px);
+  }
+  .nav { display: flex; justify-content: space-between; align-items: center; }
+  .btn-next {
+    padding: 13px 30px; background: var(--green); color: #fff;
+    border: none; border-radius: var(--radius-sm);
+    font-size: 15px; font-weight: 600; cursor: pointer;
+    opacity: 0.3; pointer-events: none;
+    transition: background 0.15s, opacity 0.15s;
+    font-family: inherit;
+  }
+  .btn-next.on { opacity: 1; pointer-events: all; }
+  .btn-next.on:hover { background: var(--green-dark); }
+  .btn-back {
+    padding: 13px 18px; background: transparent;
+    color: var(--text-muted); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); font-size: 14px; cursor: pointer;
+    font-family: inherit;
+  }
+  .btn-back:hover { background: var(--bg-secondary); }
+
+  /* Intro */
+  .intro-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 12px; background: var(--green-light);
+    color: var(--green-dark); border-radius: 999px;
+    font-size: 12px; font-weight: 600; margin-bottom: 1.25rem;
+  }
+  .intro-title { font-size: 26px; font-weight: 700; line-height: 1.35; margin-bottom: 0.75rem; }
+  .intro-sub { font-size: 15px; color: var(--text-muted); line-height: 1.7; margin-bottom: 1.5rem; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 2rem; }
+  .tag { padding: 5px 13px; border: 1px solid var(--border); border-radius: 999px; font-size: 12px; color: var(--text-muted); }
+  .btn-start {
+    width: 100%; padding: 16px; background: var(--green); color: #fff;
+    border: none; border-radius: var(--radius); font-size: 16px;
+    font-weight: 700; cursor: pointer; font-family: inherit;
+    transition: background 0.15s;
+  }
+  .btn-start:hover { background: var(--green-dark); }
+  .meta { font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 0.75rem; }
+
+  /* Résultats */
+  .res-header { text-align: center; margin-bottom: 2rem; }
+  .score-ring {
+    width: 120px; height: 120px; border-radius: 50%;
+    border: 4px solid var(--green);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    margin: 0 auto 1.25rem;
+    background: var(--bg);
+  }
+  .score-num { font-size: 34px; font-weight: 700; color: var(--green); line-height: 1; }
+  .score-sub { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+  .rtag {
+    display: inline-block; padding: 5px 14px;
+    background: var(--green-light); color: var(--green-deeper);
+    border-radius: var(--radius-sm); font-size: 12px; font-weight: 700;
+    margin-bottom: 0.75rem; letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .rtitle { font-size: 20px; font-weight: 700; margin-bottom: 0.6rem; }
+  .rdesc { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+
+  /* Axes */
+  .axes { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; margin: 1.75rem 0; }
+  .axe-card { padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-secondary); }
+  .axe-label { font-size: 12px; color: var(--text-muted); margin-bottom: 7px; }
+  .axe-bar-bg { height: 5px; background: #e0e0e0; border-radius: 3px; }
+  .axe-bar { height: 5px; border-radius: 3px; width: 0%; transition: width 0.6s ease; }
+
+  /* Recommandations */
+  .section-title {
+    font-size: 15px; font-weight: 700; color: var(--text);
+    margin-bottom: 0.75rem; padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .reco-item { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid #f0f0f0; }
+  .reco-item:last-child { border-bottom: none; }
+  .reco-num {
+    flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+    background: var(--green-light); color: var(--green-dark);
+    font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .reco-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .reco-detail { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+  /* CTA */
+  .cta-block {
+    border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 22px; text-align: center; margin-top: 1.5rem;
+    background: var(--bg-secondary);
+  }
+  .cta-block p { font-size: 14px; color: var(--text-muted); line-height: 1.65; margin-bottom: 1.25rem; }
+  .cta-primary {
+    display: block; padding: 15px 28px; background: var(--green);
+    color: #fff; border-radius: var(--radius-sm); font-size: 15px;
+    font-weight: 700; text-decoration: none; margin-bottom: 10px;
+    transition: background 0.15s;
+  }
+  .cta-primary:hover { background: var(--green-dark); }
+  .cta-secondary { font-size: 13px; color: var(--text-muted); }
+  .cta-secondary a { color: var(--green); text-decoration: none; font-weight: 600; }
+  .sig { font-size: 11px; color: #bbb; text-align: center; margin-top: 1.5rem; }
+
+  @media (max-width: 480px) {
+    .card { padding: 1.75rem 1.25rem; }
+    .intro-title { font-size: 22px; }
+    .axes { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <div class="logo">We Do It Better</div>
+
+  <!-- INTRO -->
+  <div id="intro">
+    <div class="intro-badge">Audit gratuit · 3 minutes</div>
+    <div class="intro-title">Où en est vraiment votre stratégie digitale ?</div>
+    <div class="intro-sub">8 questions pour diagnostiquer votre maturité digitale et obtenir vos 3 priorités concrètes. Sans formulaire. Sans relance commerciale.</div>
+    <div class="tags">
+      <span class="tag">Site web</span><span class="tag">SEO</span>
+      <span class="tag">Publicité</span><span class="tag">Analytics</span>
+      <span class="tag">Génération de leads</span><span class="tag">IA</span>
+    </div>
+    <button class="btn-start" onclick="start()">Démarrer l'audit →</button>
+    <div class="meta">100% gratuit · Résultats immédiats · Aucun email requis</div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quiz" style="display:none">
+    <div class="prog-bg"><div class="prog-fill" id="prog"></div></div>
+    <div class="qlabel" id="qlabel"></div>
+    <div class="qtext" id="qtext"></div>
+    <div class="opts" id="opts"></div>
+    <div class="nav">
+      <button class="btn-back" id="bback" onclick="prev()" style="visibility:hidden">← Retour</button>
+      <button class="btn-next" id="bnext" onclick="next()">Continuer →</button>
+    </div>
+  </div>
+
+  <!-- RÉSULTATS -->
+  <div id="res" style="display:none">
+    <div class="res-header">
+      <div class="score-ring">
+        <div class="score-num" id="rscore"></div>
+        <div class="score-sub">sur 24</div>
+      </div>
+      <div class="rtag" id="rtag"></div>
+      <div class="rtitle" id="rtitle"></div>
+      <div class="rdesc" id="rdesc"></div>
+    </div>
+    <div class="axes" id="axes"></div>
+    <div class="section-title">Vos 3 priorités pour progresser</div>
+    <div id="recos"></div>
+    <div class="cta-block">
+      <p id="ctap"></p>
+      <a class="cta-primary" href="https://we-do-it-better.fr" target="_blank">Demander un audit approfondi →</a>
+      <div class="cta-secondary">ou écrire directement à <a href="mailto:laurent@we-do-it.fr">laurent@we-do-it.fr</a></div>
+    </div>
+    <div class="sig">we-do-it-better.fr · We Do It Better © 2026</div>
+  </div>
+
+</div>
+
+<script>
+const Qs=[
+  {q:"Votre site web est-il votre meilleur commercial ?",axe:"Site & UX",opts:[
+    "Site vitrine basique, peu mis à jour, pas optimisé mobile",
+    "Site fonctionnel mais sans stratégie de conversion clairement définie",
+    "Site optimisé mobile, rapide, avec des CTA — mais peu de trafic organique",
+    "Site performant, Core Web Vitals au vert, générateur de leads régulier"
+  ]},
+  {q:"Comment se porte votre visibilité sur Google ?",axe:"SEO",opts:[
+    "On ne m'y trouve pas vraiment, ou sur des requêtes très marginales",
+    "Je suis positionné sur mon nom de marque, peu sur les requêtes métier",
+    "Quelques mots-clés stratégiques sont positionnés, mais on peut aller plus loin",
+    "Je suis dans le top 3 sur mes requêtes cibles et je génère du trafic qualifié"
+  ]},
+  {q:"Utilisez-vous la publicité en ligne pour accélérer votre acquisition ?",axe:"SEA / Ads",opts:[
+    "Aucune campagne active — je ne sais pas par où commencer",
+    "On a testé, mais sans structure ni pilotage — ROI flou",
+    "Des campagnes tournent, mais le suivi des conversions reste approximatif",
+    "Campagnes Google Ads structurées, ROAS suivi, budget optimisé"
+  ]},
+  {q:"Mesurez-vous vraiment ce qui se passe sur votre site ?",axe:"Analytics",opts:[
+    "Google Analytics est installé... mais je ne l'ouvre presque jamais",
+    "Je regarde le trafic global, sans aller plus loin dans l'analyse",
+    "Je suis le trafic et quelques objectifs, mais les données sont incomplètes",
+    "GA4 + GTM configurés, Looker Studio, décisions data-driven"
+  ]},
+  {q:"Comment générez-vous de nouveaux contacts qualifiés aujourd'hui ?",axe:"Génération leads",opts:[
+    "Essentiellement le bouche-à-oreille — aucun flux entrant structuré",
+    "Quelques actions ponctuelles sans stratégie continue",
+    "Un canal d'acquisition fonctionne bien, mais ça reste fragile",
+    "Plusieurs canaux actifs, pipeline prévisible, leads qualifiés chaque semaine"
+  ]},
+  {q:"Quelle est votre stratégie sur les réseaux sociaux ?",axe:"Social media",opts:[
+    "Présence inexistante ou abandonnée — on n'a pas le temps",
+    "Publications irrégulières, sans ligne éditoriale définie",
+    "Une page active mais l'engagement reste limité et les résultats flous",
+    "Stratégie éditoriale claire, communauté engagée, impact mesurable"
+  ]},
+  {q:"L'IA est-elle déjà intégrée dans votre marketing ?",axe:"IA & automatisation",opts:[
+    "Pas du tout — je ne sais pas par où commencer",
+    "On utilise un outil IA ponctuellement (Claude, Gemini, Copilot…), sans cadre ni méthode",
+    "L'IA est dans nos process créatifs mais pas encore dans notre acquisition",
+    "L'IA accélère contenus, ads, reporting — gain de temps réel"
+  ]},
+  {q:"Comment pilotez-vous votre budget marketing digital ?",axe:"Budget & ROI",opts:[
+    "Pas de budget marketing digital formalisé — c'est du ponctuel",
+    "Un budget existe mais sans allocation claire ni suivi de ROI",
+    "Budget alloué par canal, mais les arbitrages restent difficiles",
+    "Budget piloté à la donnée : CAC, LTV, ROAS — chaque euro est justifié"
+  ]}
+];
+
+const profiles=[
+  {max:6,tag:"Terrain vierge",title:"Vos leviers digitaux sont quasi-inexploités",
+   desc:"Vous partez de loin — et c'est une bonne nouvelle : les gains rapides seront spectaculaires. La priorité absolue est de construire un socle solide avant de dépenser en publicité.",
+   recos:[
+     {name:"Audit technique de votre site",detail:"Vitesse, mobile, Core Web Vitals, balises. C'est la fondation de tout. Sans ça, chaque euro dépensé ailleurs est gaspillé."},
+     {name:"Installer GA4 + GTM correctement",detail:"Sans données fiables, impossible de piloter. On observe souvent 30 à 40% de trafic perdu faute de tracking correct."},
+     {name:"Google Business Profile optimisé",detail:"Visibilité locale immédiate, gratuite, et souvent négligée. Résultats visibles en 30 à 60 jours."}
+   ],
+   cta:"Un point de départ structuré avec We Do It Better vous évitera de disperser vos efforts et votre budget sur les mauvaises priorités."
+  },
+  {max:12,tag:"En rodage",title:"Les bases existent, mais manquent de structure",
+   desc:"Vous avez commencé à activer des leviers, mais sans cohérence ni pilotage précis. Résultat : de l'énergie dépensée, des résultats inégaux. Il faut structurer et mesurer.",
+   recos:[
+     {name:"Tracking des conversions en priorité",detail:"Pas de SEA rentable sans suivi précis. Mettre en place les événements GA4 et les conversions Google Ads change tout à la lecture du ROI."},
+     {name:"Choisir un canal d'acquisition principal",detail:"SEO organique, Google Ads ou LinkedIn. Pas les trois en même temps. Maîtriser l'un avant de diversifier — c'est contre-intuitif mais ça fonctionne."},
+     {name:"Stratégie de contenu SEO minimale",detail:"3 articles experts par mois sur les requêtes de vos clients. En 6 mois, la différence est visible et mesurable."}
+   ],
+   cta:"We Do It Better peut auditer vos dispositifs actuels et vous proposer une feuille de route claire pour transformer vos efforts en résultats mesurables."
+  },
+  {max:18,tag:"En bonne voie",title:"Solide, mais des optimisations majeures sont possibles",
+   desc:"Votre stratégie digitale fonctionne. Mais à ce stade, les gains viennent des détails : meilleure segmentation, tracking affiné, process automatisés. C'est là que l'expertise fait la différence.",
+   recos:[
+     {name:"Segmentation avancée des campagnes Ads",detail:"Sortir des campagnes broad. Audiences lookalike, remarketing structuré, Performance Max bien paramétré. On observe 20 à 40% de performance supplémentaire sans augmenter le budget."},
+     {name:"Tableau de bord unifié Looker Studio",detail:"SEO + SEA + Social en un seul dashboard. Décisions en 10 minutes par semaine au lieu de 2 heures d'exports manuels."},
+     {name:"IA dans les process marketing",detail:"Automatiser la production de variantes d'annonces, de briefs SEO, de reporting. Gain réel : 30 à 40% sur les tâches répétitives."}
+   ],
+   cta:"Un regard extérieur expert identifie souvent des optimisations à fort impact que l'équipe interne ne voit plus — par proximité avec le sujet."
+  },
+  {max:24,tag:"Stratège confirmé",title:"Vous pilotez votre acquisition avec maturité",
+   desc:"Votre maturité digitale est réelle. Pour maintenir cette avance, les enjeux sont désormais sur les nouvelles frontières : IA avancée, GEO, et données first-party.",
+   recos:[
+     {name:"GEO — Generative Engine Optimization",detail:"Être cité par ChatGPT, Perplexity, Gemini sur vos requêtes métier. La prochaine frontière du SEO, encore peu exploitée par vos concurrents. La fenêtre d'opportunité est maintenant."},
+     {name:"Server-Side Tracking",detail:"Cookieless, données first-party, récupération des 20 à 30% de conversions perdues par les bloqueurs et les restrictions navigateurs."},
+     {name:"Personal brand dirigeant sur LinkedIn",detail:"À ce niveau de maturité, le thought leadership du CEO est souvent le canal d'acquisition le plus rentable. C'est la prochaine étape logique."}
+   ],
+   cta:"We Do It Better accompagne des acteurs à votre niveau sur les nouvelles frontières de la performance digitale. Parlons-en concrètement."
+  }
+];
+
+let cur=0, ans=new Array(8).fill(null);
+
+function start(){
+  document.getElementById('intro').style.display='none';
+  document.getElementById('quiz').style.display='block';
+  render();
+}
+
+function render(){
+  const q=Qs[cur];
+  document.getElementById('qlabel').textContent='Question '+(cur+1)+' / '+Qs.length;
+  document.getElementById('prog').style.width=((cur/Qs.length)*100)+'%';
+  document.getElementById('qtext').textContent=q.q;
+  const o=document.getElementById('opts');
+  o.innerHTML='';
+  q.opts.forEach((t,i)=>{
+    const b=document.createElement('button');
+    b.className='opt'+(ans[cur]===i?' sel':'');
+    b.innerHTML='<span class="opt-check"></span><span>'+t+'</span>';
+    b.onclick=()=>pick(i);
+    o.appendChild(b);
+  });
+  document.getElementById('bback').style.visibility=cur===0?'hidden':'visible';
+  const nb=document.getElementById('bnext');
+  nb.textContent=cur===Qs.length-1?'Voir mon diagnostic →':'Continuer →';
+  ans[cur]!==null?nb.classList.add('on'):nb.classList.remove('on');
+}
+
+function pick(i){
+  ans[cur]=i;
+  document.querySelectorAll('.opt').forEach((b,idx)=>b.classList.toggle('sel',idx===i));
+  document.getElementById('bnext').classList.add('on');
+}
+
+function next(){
+  if(ans[cur]===null)return;
+  if(cur<Qs.length-1){cur++;render();}else showRes();
+}
+
+function prev(){if(cur>0){cur--;render();}}
+
+function showRes(){
+  document.getElementById('quiz').style.display='none';
+  const r=document.getElementById('res');
+  r.style.display='block';
+  const total=ans.reduce((s,a)=>s+(a!==null?a:0),0);
+  document.getElementById('rscore').textContent=total;
+  const p=profiles.find(p=>total<=p.max)||profiles[profiles.length-1];
+  document.getElementById('rtag').textContent=p.tag;
+  document.getElementById('rtitle').textContent=p.title;
+  document.getElementById('rdesc').textContent=p.desc;
+  document.getElementById('ctap').textContent=p.cta;
+  const recos=document.getElementById('recos');
+  recos.innerHTML='';
+  p.recos.forEach((rc,i)=>{
+    recos.innerHTML+='<div class="reco-item"><div class="reco-num">'+(i+1)+'</div><div><div class="reco-name">'+rc.name+'</div><div class="reco-detail">'+rc.detail+'</div></div></div>';
+  });
+  const colors=['#1D9E75','#378ADD','#D85A30','#BA7517','#D4537E','#639922','#7F77DD','#E24B4A'];
+  const ax=document.getElementById('axes');
+  ax.innerHTML='';
+  Qs.forEach((q,i)=>{
+    const v=ans[i]||0;
+    const pct=Math.round((v/3)*100);
+    const div=document.createElement('div');
+    div.className='axe-card';
+    div.innerHTML='<div class="axe-label">'+q.axe+'</div><div class="axe-bar-bg"><div class="axe-bar" id="ax'+i+'" style="background:'+colors[i]+'"></div></div>';
+    ax.appendChild(div);
+    setTimeout(()=>{const el=document.getElementById('ax'+i);if(el)el.style.width=pct+'%';},100+i*60);
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
